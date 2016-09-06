@@ -1,8 +1,7 @@
-import json
+from vk_app import App, download_vk_objects
 
-from vk_app import App
-
-from services.audios import get_audios_from_raw
+from models import Audio
+from settings import DST_PATH
 
 
 class MusicApp(App):
@@ -12,8 +11,8 @@ class MusicApp(App):
     def load_audios(self, params: dict):
         params['access_token'] = self.access_token
 
+        save_path = DST_PATH
+
         raw_audios = self.get_items('audio.get', params)
-        audios = get_audios_from_raw(raw_audios)
-
-        x = 5
-
+        audios = Audio.get_vk_objects_from_raw(raw_audios)
+        download_vk_objects(audios, save_path)
