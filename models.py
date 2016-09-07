@@ -3,6 +3,8 @@ import os
 from vk_app import VKObject
 from vk_app.utils import get_date_from_millis, download
 
+MAX_FILE_NAME_LEN = 143
+
 AUDIO_FILE_NAME_FORMAT = "{artist} - {title}"
 AUDIO_FILE_EXTENSION = ".mp3"
 
@@ -20,6 +22,11 @@ class Audio(VKObject):
         self.date = date
         self.link = link
 
+    def __str__(self):
+        return "Audio called '{}'".format(
+            AUDIO_FILE_NAME_FORMAT.format(**self.__dict__)
+        )
+
     def download(self, save_path: str):
         audio_link = self.link
         audio_file_path = self.get_audio_file_path(save_path)
@@ -27,12 +34,13 @@ class Audio(VKObject):
         download(audio_link, audio_file_path)
 
     def get_audio_file_path(self, save_path: str) -> str:
-        audio_file_name = self.get_audio_file_name()
+        audio_file_name = self.get_audio_file_name().replace(os.sep, ' ')
         audio_file_path = os.path.join(save_path, audio_file_name)
         return audio_file_path
 
     def get_audio_file_name(self) -> str:
-        audio_file_name = AUDIO_FILE_NAME_FORMAT.format(**self.__dict__) + AUDIO_FILE_EXTENSION
+        audio_file_name = \
+            AUDIO_FILE_NAME_FORMAT.format(**self.__dict__).strip()[:MAX_FILE_NAME_LEN] + AUDIO_FILE_EXTENSION
         return audio_file_name
 
     @classmethod

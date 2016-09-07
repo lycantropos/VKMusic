@@ -4,8 +4,9 @@ import os
 CONFIGURATION_FILE_NAME = 'configuration.conf'
 CURRENT_FILE_PATH = os.path.realpath(__file__)
 CURRENT_FILE_ABSPATH = os.path.abspath(CURRENT_FILE_PATH)
-CURRENT_FILE_DIR = os.path.dirname(CURRENT_FILE_ABSPATH)
-CONFIGURATION_FILE_PATH = os.path.join(CURRENT_FILE_DIR, CONFIGURATION_FILE_NAME)
+BASE_DIR = os.path.dirname(CURRENT_FILE_ABSPATH)
+CONFIGURATION_FILE_FOLDER = 'configurations'
+CONFIGURATION_FILE_PATH = os.path.join(BASE_DIR, CONFIGURATION_FILE_FOLDER, CONFIGURATION_FILE_NAME)
 config = configparser.ConfigParser()
 config.read(CONFIGURATION_FILE_PATH)
 
@@ -20,7 +21,6 @@ SCOPE = app.get('scope')
 files = config['files']
 DST_PATH = files.get('dst_path')
 
-# hyphen was chosen because its MySQL default DATE separator
-DATE_SEP = '-'
-DATE_ORDER = ['%Y', '%m', '%d']
-DATE_FORMAT = DATE_SEP.join(DATE_ORDER)
+logger = config['logger']
+LOGS_PATH = logger.get('logs_path')
+LOGGING_CONFIG_PATH = logger.get('logging_config_path')
