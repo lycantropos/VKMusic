@@ -3,5 +3,5 @@
 *.pyc
 .cache/
 *__pycache__/
-*.log
+*.log*
 /configurations/configuration.conf
