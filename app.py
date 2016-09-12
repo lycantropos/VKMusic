@@ -1,9 +1,7 @@
-import os
-
-from vk_app import App, LoggingConfig, download_vk_objects
+from vk_app import App, LoggingConfig
 
 from models import Audio
-from settings import DST_PATH, BASE_DIR, LOGGING_CONFIG_PATH, LOGS_PATH
+from settings import BASE_DIR, LOGGING_CONFIG_PATH, LOGS_PATH
 
 
 class MusicApp(App):

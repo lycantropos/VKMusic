@@ -33,13 +33,18 @@ class Audio(VKObject, Base):
 
     def __init__(self, vk_id: int, owner_id: int, artist: str, title: str,
                  genre_id: int, lyrics_id: int, duration: int, date_time: datetime, link: str):
+        # VK utility fields
         self.vk_id = vk_id
         self.owner_id = owner_id
+
+        # info fields
         self.artist = artist
         self.title = title
         self.genre_id = genre_id
         self.lyrics_id = lyrics_id
         self.duration = duration
+
+        # technical info fields
         self.date_time = date_time
         self.link = link
 
