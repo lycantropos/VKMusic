@@ -1,23 +1,26 @@
 import os
-from datetime import datetime
+from datetime import datetime, timedelta, time
 
 from sqlalchemy import Column, Integer, String, DateTime, Time, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from vk_app import VKObject
-from vk_app.utils import download
+from vk_community.utils import download
 
-from settings import MAX_FILE_NAME_LEN, DATABASE_URI
+from settings import MAX_FILE_NAME_LEN, DATABASE_URL
 
-engine = create_engine(DATABASE_URI)
+engine = create_engine(DATABASE_URL, echo=True)
 connection = engine.connect()
 Base = declarative_base()
 
 
-class Audio(VKObject, Base):
+class Audio(Base, VKObject):
     FILE_NAME_FORMAT = "{artist} - {title}"
     FILE_EXTENSION = ".mp3"
 
     __tablename__ = 'audio'
+    __table_args__ = {
+        'mysql_charset': 'utf8'
+    }
     id = Column(Integer, primary_key=True, autoincrement=True)
     vk_id = Column(Integer, primary_key=True, autoincrement=False)
     owner_id = Column(Integer, nullable=False)
@@ -25,14 +28,14 @@ class Audio(VKObject, Base):
     artist = Column(String(255), nullable=False)
     title = Column(String(255), nullable=False)
     genre_id = Column(Integer, nullable=True)
-    lyrics_id = Column(Integer, primary_key=True, nullable=True)
+    lyrics_id = Column(Integer, nullable=True)
     duration = Column(Time, nullable=False)
 
     date_time = Column(DateTime, nullable=False)
     link = Column(String(255), primary_key=True)
 
     def __init__(self, vk_id: int, owner_id: int, artist: str, title: str,
-                 genre_id: int, lyrics_id: int, duration: int, date_time: datetime, link: str):
+                 genre_id: int, lyrics_id: int, duration: time, date_time: datetime, link: str):
         # VK utility fields
         self.vk_id = vk_id
         self.owner_id = owner_id
@@ -72,12 +75,19 @@ class Audio(VKObject, Base):
 
     @classmethod
     def from_raw(cls, raw_vk_object: dict):
+        print(raw_vk_object['title'])
         return Audio(
             int(raw_vk_object['id']), int(raw_vk_object['owner_id']),
             raw_vk_object['artist'].strip(), raw_vk_object['title'].strip(),
             int(raw_vk_object.pop('genre_id', 0)),
             int(raw_vk_object.pop('lyrics_id', 0)),
-            int(raw_vk_object['duration']),
-            datetime.strptime(raw_vk_object['date']),
+            (
+                datetime.min + timedelta(
+                    seconds=int(
+                        raw_vk_object['duration']
+                    )
+                )
+            ).time(),
+            datetime.fromtimestamp(raw_vk_object['date']),
             raw_vk_object['url'],
         )

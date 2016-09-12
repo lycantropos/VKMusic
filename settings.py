@@ -2,6 +2,8 @@ import configparser
 import os
 from urllib.parse import quote_plus
 
+from sqlalchemy.engine import url
+
 CONFIGURATION_FILE_NAME = 'configuration.conf'
 CURRENT_FILE_PATH = os.path.realpath(__file__)
 CURRENT_FILE_ABSPATH = os.path.abspath(CURRENT_FILE_PATH)
@@ -29,7 +31,16 @@ DB_HOST = database.get('db_host')
 DB_USER_NAME = database.get('db_user_name')
 DB_USER_PASSWORD = quote_plus(database.get('db_user_password'))
 DB_NAME = database.get('db_name')
-DATABASE_URI = 'mysql+mysqldb://{}:{}@{}/{}'.format(DB_USER_NAME, DB_USER_PASSWORD, DB_HOST, DB_NAME)
+
+DATABASE_URL = url.URL(
+    drivername='mysql',
+    host=DB_HOST,
+    port=3306,
+    username=DB_USER_NAME,
+    password=DB_USER_PASSWORD,
+    database=DB_NAME,
+    query={'charset': 'utf8'}
+)
 
 logger = config['logger']
 LOGS_PATH = logger.get('logs_path')
