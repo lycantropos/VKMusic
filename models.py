@@ -4,7 +4,7 @@ from datetime import datetime, timedelta, time
 from sqlalchemy import Column, Integer, String, DateTime, Time, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from vk_app import VKObject
-from vk_app.utils import download
+from vk_app.utils import download, check_dir
 
 from settings import MAX_FILE_NAME_LEN, DATABASE_URL
 
@@ -20,7 +20,7 @@ class Audio(Base, VKObject):
     __table_args__ = {
         'mysql_charset': 'utf8'
     }
-    id = Column(Integer, primary_key=True, autoincrement=True)
+
     vk_id = Column(Integer, primary_key=True, autoincrement=False)
     owner_id = Column(Integer, nullable=False)
 
@@ -81,15 +81,18 @@ class Audio(Base, VKObject):
             'lyrics_id'
         ]
 
-    def download(self, save_path: str):
-        audio_link = self.link
-        audio_file_path = self.get_file_path(save_path)
+    def download(self, path: str):
+        audio_file_subdirs = self.get_file_subdirs()
+        check_dir(path, audio_file_subdirs)
 
-        download(audio_link, audio_file_path)
-
-    def get_file_path(self, save_path: str) -> str:
+        audio_file_dir = os.path.join(path, audio_file_subdirs)
         audio_file_name = self.get_file_name()
-        audio_file_path = os.path.join(save_path, audio_file_name)
+        audio_file_path = os.path.join(audio_file_dir, audio_file_name)
+
+        download(self.link, audio_file_path)
+
+    def get_file_dir(self, save_path: str) -> str:
+        audio_file_path = os.path.join(save_path, self.artist)
         return audio_file_path
 
     def get_file_name(self) -> str:

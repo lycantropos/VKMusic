@@ -39,7 +39,7 @@ DATABASE_URL = url.URL(
     username=DB_USER_NAME,
     password=DB_USER_PASSWORD,
     database=DB_NAME,
-    query={'charset': 'utf8'}
+    query={'charset': 'utf8mb4'}
 )
 
 logger = config['logger']

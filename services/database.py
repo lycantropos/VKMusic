@@ -2,8 +2,7 @@ from sqlalchemy.ext.compiler import compiles
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.sql.expression import Insert
 
-from models import Audio
-from models import engine
+from models import Audio, engine
 
 
 @compiles(Insert)
@@ -22,7 +21,7 @@ Session = sessionmaker(bind=engine)
 def save_in_db(audios: list):
     audios_dicts = list(audio.as_dict() for audio in audios)
     info_fields = Audio.info_fields()
-    update_str = ' AND '.join(' {0} = VALUES({0})'.format(info_field) for info_field in info_fields)
+    update_str = ', '.join(' {0} = VALUES({0})'.format(info_field) for info_field in info_fields)
     with engine.connect() as connection:
         connection.execute(Audio.__table__.insert(mysql_append_string='ON DUPLICATE KEY UPDATE' + update_str),
                            audios_dicts)
@@ -62,6 +61,17 @@ def load_audios_from_db(session, filters: dict):
     if max_duration:
         q.filter(
             Audio.duration <= max_duration
+        )
+
+    start_time = filters.get('start_time', None)
+    if start_time:
+        q.filter(
+            Audio.date_time >= start_time
+        )
+    end_time = filters.get('end_time', None)
+    if end_time:
+        q.filter(
+            Audio.date_time <= end_time
         )
 
     audios = q.all()
