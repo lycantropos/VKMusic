@@ -4,12 +4,12 @@ from urllib.parse import quote_plus
 
 from sqlalchemy.engine import url
 
-CONFIGURATION_FILE_NAME = 'configuration.conf'
 CURRENT_FILE_PATH = os.path.realpath(__file__)
 CURRENT_FILE_ABSPATH = os.path.abspath(CURRENT_FILE_PATH)
 BASE_DIR = os.path.dirname(CURRENT_FILE_ABSPATH)
 
 CONFIGURATION_FILE_FOLDER = 'configurations'
+CONFIGURATION_FILE_NAME = 'configuration.conf'
 CONFIGURATION_FILE_PATH = os.path.join(BASE_DIR, CONFIGURATION_FILE_FOLDER, CONFIGURATION_FILE_NAME)
 config = configparser.ConfigParser()
 config.read(CONFIGURATION_FILE_PATH)

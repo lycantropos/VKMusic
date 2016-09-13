@@ -10,7 +10,7 @@ class MusicApp(App):
         self.logging_config = LoggingConfig(BASE_DIR, LOGGING_CONFIG_PATH, LOGS_PATH)
         self.logging_config.set()
 
-    def load_audios(self, params: dict):
+    def load_audios_from_vk(self, params: dict):
         params['access_token'] = self.access_token
         raw_audios = self.get_items('audio.get', params)
         audios = Audio.get_vk_objects_from_raw(raw_audios)
