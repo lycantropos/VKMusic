@@ -1,6 +1,7 @@
 import logging
 
 from app import MusicApp
+from services.audio_files import parse_lastfm
 from services.database import save_in_db, load_audios_from_db, Session
 from settings import APP_ID, USER_LOGIN, USER_PASSWORD, SCOPE, DST_ABSPATH
 

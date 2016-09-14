@@ -31,7 +31,7 @@ class Audio(Base, VKObject):
     duration = Column(Time, nullable=False)
 
     date_time = Column(DateTime, nullable=False)
-    link = Column(String(255), primary_key=True)
+    link = Column(String(255), unique=True)
 
     def __init__(self, vk_id: int, owner_id: int, artist: str, title: str,
                  genre_id: int, lyrics_id: int, duration: time, date_time: datetime, link: str):
