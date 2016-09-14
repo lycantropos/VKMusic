@@ -83,17 +83,17 @@ class Audio(Base, VKObject):
 
     def download(self, path: str):
         audio_file_subdirs = self.get_file_subdirs()
-        check_dir(path, audio_file_subdirs)
+        check_dir(path, *audio_file_subdirs)
 
-        audio_file_dir = os.path.join(path, audio_file_subdirs)
+        audio_file_dir = os.path.join(path, *audio_file_subdirs)
         audio_file_name = self.get_file_name()
         audio_file_path = os.path.join(audio_file_dir, audio_file_name)
 
         download(self.link, audio_file_path)
 
-    def get_file_dir(self, save_path: str) -> str:
-        audio_file_path = os.path.join(save_path, self.artist)
-        return audio_file_path
+    def get_file_subdirs(self) -> str:
+        audio_file_subdirs = [self.artist]
+        return audio_file_subdirs
 
     def get_file_name(self) -> str:
         file_name = Audio.FILE_NAME_FORMAT.format(
