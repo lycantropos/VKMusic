@@ -1,10 +1,16 @@
+from typing import List
+
+from sqlalchemy import create_engine
 from sqlalchemy.ext.compiler import compiles
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import Session
 from sqlalchemy.sql.expression import Insert
 
-from models import Audio, engine
+from models import Audio
+from settings import DATABASE_URL
 
+engine = create_engine(DATABASE_URL, echo=True)
 
+# TODO: remove this
 @compiles(Insert)
 def append_string(insert, compiler, **kw):
     s = compiler.visit_insert(insert, **kw)
@@ -15,19 +21,17 @@ def append_string(insert, compiler, **kw):
 
 Insert.argument_for("mysql", "append_string", None)
 
-Session = sessionmaker(bind=engine)
+
+def save_in_db(session: Session, audios: List[Audio]):
+    try:
+        for audio in audios:
+            session.merge(audio)
+        session.commit()
+    finally:
+        session.close()
 
 
-def save_in_db(audios: list):
-    audios_dicts = list(audio.as_dict() for audio in audios)
-    info_fields = Audio.info_fields()
-    update_str = ', '.join(' {0} = VALUES({0})'.format(info_field) for info_field in info_fields)
-    with engine.connect() as connection:
-        connection.execute(Audio.__table__.insert(mysql_append_string='ON DUPLICATE KEY UPDATE' + update_str),
-                           audios_dicts)
-
-
-def load_audios_from_db(session, filters: dict):
+def load_audios_from_db(session: Session, filters: dict):
     q = session.query(Audio)
 
     owner_id = filters.get('owner_id', None)
@@ -76,7 +80,3 @@ def load_audios_from_db(session, filters: dict):
 
     audios = q.all()
     return audios
-
-
-if __name__ == '__main__':
-    save_in_db([])

@@ -1,4 +1,5 @@
 from vk_app import App, LoggingConfig
+from vk_app.services.vk_objects import get_vk_objects_from_raw
 
 from models import Audio
 from settings import BASE_DIR, LOGGING_CONFIG_PATH, LOGS_PATH
@@ -13,5 +14,5 @@ class MusicApp(App):
     def load_audios_from_vk(self, params: dict):
         params['access_token'] = self.access_token
         raw_audios = self.get_items('audio.get', params)
-        audios = Audio.get_vk_objects_from_raw(raw_audios)
+        audios = get_vk_objects_from_raw(Audio, raw_audios)
         return audios

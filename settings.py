@@ -42,6 +42,11 @@ DATABASE_URL = url.URL(
     query={'charset': 'utf8mb4'}
 )
 
+
+lastfm_api = config['lastfm_api']
+LASTFM_API_KEY = lastfm_api.get('lastfm_api_key')
+LASTFM_API_SHARED_SECRET = lastfm_api.get('lastfm_api_shared_secret')
+
 logger = config['logger']
 LOGS_PATH = logger.get('logs_path')
 LOGGING_CONFIG_PATH = logger.get('logging_config_path')

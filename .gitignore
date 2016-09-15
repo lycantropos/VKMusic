@@ -4,4 +4,4 @@
 .cache/
 *__pycache__/
 *.log*
-/configurations/configuration.conf
+configuration.conf
