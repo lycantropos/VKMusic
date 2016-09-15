@@ -1,4 +1,5 @@
-from vk_app import App, LoggingConfig
+from vk_app import App
+from vk_app.services.logging_config import LoggingConfig
 from vk_app.services.vk_objects import get_vk_objects_from_raw
 
 from models import Audio

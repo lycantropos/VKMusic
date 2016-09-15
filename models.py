@@ -3,8 +3,9 @@ from datetime import datetime, timedelta, time
 
 from sqlalchemy import Column, Integer, String, DateTime, Time
 from sqlalchemy.ext.declarative import declarative_base
-from vk_app import VKObject
-from vk_app.utils import download, check_dir
+from vk_app.models import VKObject
+from vk_app.services.loading import download
+from vk_app.utils import check_dir
 
 from settings import MAX_FILE_NAME_LEN
 
@@ -48,6 +49,11 @@ class Audio(Base, VKObject):
         self.duration = duration
         self.date_time = date_time
         self.link = link
+
+    def __repr__(self):
+        return "<Audio(artist='{}', title='{}', duration='{}')>".format(
+            self.artist, self.title, self.duration
+        )
 
     def __str__(self):
         return "Audio called '{}'".format(

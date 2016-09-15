@@ -46,6 +46,8 @@ DATABASE_URL = url.URL(
 lastfm_api = config['lastfm_api']
 LASTFM_API_KEY = lastfm_api.get('lastfm_api_key')
 LASTFM_API_SHARED_SECRET = lastfm_api.get('lastfm_api_shared_secret')
+LASTFM_USER_NAME = lastfm_api.get('lastfm_user_name')
+LASTFM_USER_PASSWORD = lastfm_api.get('lastfm_user_password')
 
 logger = config['logger']
 LOGS_PATH = logger.get('logs_path')

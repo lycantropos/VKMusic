@@ -22,4 +22,4 @@ if __name__ == '__main__':
     for audio in audios:
         logging.info(audio)
         audio.synchronize(path)
-        parse_lastfm(audio, path)
+        # parse_lastfm(audio, path)
