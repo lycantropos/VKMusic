@@ -6,16 +6,13 @@ from sqlalchemy.orm import Session
 from models import Audio
 from settings import DATABASE_URL
 
-engine = create_engine(DATABASE_URL, echo=False)
+engine = create_engine(DATABASE_URL, echo=True)
 
 
 def save_in_db(session: Session, audios: List[Audio]):
-    try:
-        for audio in audios:
-            session.merge(audio)
-        session.commit()
-    finally:
-        session.close()
+    for audio in audios:
+        session.merge(audio)
+    session.commit()
 
 
 def load_audios_from_db(session: Session, filters: dict):
