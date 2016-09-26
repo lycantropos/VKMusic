@@ -49,6 +49,9 @@ LASTFM_API_SHARED_SECRET = lastfm_api.get('lastfm_api_shared_secret')
 LASTFM_USER_NAME = lastfm_api.get('lastfm_user_name')
 LASTFM_USER_PASSWORD = lastfm_api.get('lastfm_user_password')
 
+formatting = config['formatting']
+DATETIME_FORMAT = formatting.get('datetime_format')
+
 logger = config['logger']
 LOGS_PATH = logger.get('logs_path')
 LOGGING_CONFIG_PATH = logger.get('logging_config_path')
