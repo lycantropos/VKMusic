@@ -1,6 +1,6 @@
 from sqlalchemy import Column, String
 from sqlalchemy.ext.declarative import declarative_base
-from vk_app.models.attachments import VKAudio
+from vk_app.attachables import VKAudio
 from vk_app.utils import map_non_primary_columns_by_ancestor
 
 Base = declarative_base()

@@ -1,5 +1,6 @@
 .git/
 .idea/
 *.pyc
+*egg*
 .cache/
 *__pycache__/
